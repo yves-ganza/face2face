@@ -1,7 +1,9 @@
 const gallery = document.querySelector('#gallery');
+const path = document.URL;
+
 
 const socket = io('/');
-const peer = new Peer(undefined, {
+const peer = new Peer({
     host: '/',
     port: '3001'
 });
@@ -45,10 +47,13 @@ getUserMedia({video: true, audio: true}).then(stream => {
 
 
 const addVideoStream = (newVideo, stream) => {
-    newVideo.className = 'h-96 w-94 p-4';
+    const videoWrapper = document.createElement('div');
+    videoWrapper.className = 'video-wrapper rounded w-full h-auto sm:w-1/2 sm:h-1/2';
+    newVideo.className = 'h-full w-full';
     newVideo.autoplay = true;
     newVideo.srcObject = stream;
-    gallery.append(newVideo);
+    videoWrapper.append(newVideo)
+    gallery.append(videoWrapper);
 }
 
 const callNewUser = (userId, stream) => {
