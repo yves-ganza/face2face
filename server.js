@@ -7,7 +7,6 @@ const io = new Server(server)
 const {v4: uuidV4} = require('uuid');
 require('dotenv').config()
 
-console.log(process.env.ROOM_ID);
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
@@ -17,16 +16,14 @@ app.get('/', (req, res) => {
 })
 
 app.get('/:room', (req, res) => {
-    console.log(`room ${req.params.room} created`)
-    res.render('home', {roomId: req.params.room, userId: '0101'})
+    res.render('home', {roomId: req.params.room})
 })
 
 io.on('connection', socket => {
-    console.log('A user connected');
 
     socket.on('join-room', (roomId, userId) => {
-        console.log(roomId, userId)
-        socket.join(roomId)
+        console.log(`Room: ${roomId} \t User: ${userId}`);
+        socket.join(roomId);
         socket.broadcast.to(roomId).emit('user-connected', userId);
         
         socket.on('disconnect', ()=>{
